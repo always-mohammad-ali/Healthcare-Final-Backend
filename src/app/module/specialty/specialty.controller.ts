@@ -23,6 +23,50 @@ const createSpecialty = async(req : Request, res : Response) =>{
     }
 }
 
+const getAllSpecialty = async(req : Request, res : Response) =>{
+      try{
+
+        const specialties = await SpecialtyService.getAllSpecialty();
+
+        res.status(201).json({
+            success : true,
+            message : "successfully get all those specialty data",
+            data : specialties
+        })
+
+      }catch(error){
+        res.status(404).json({
+            success : false,
+            message : "failed to get all specialty data",
+            error : error
+        })
+      }
+}
+
+const deleteSpecialty = async(req : Request, res : Response) =>{
+     try{
+
+        const {id}  = req.params;
+
+        const result = await SpecialtyService.deleteSpecialty(id as string);
+
+        res.status(201).json({
+            success : true,
+            message : "successfully delete specialty data by id",
+            data : result
+        })
+
+      }catch(error){
+        res.status(404).json({
+            success : false,
+            message : "failed to delete specialty data",
+            error : error
+        })
+      }
+}
+
 export const SpecialtyController = {
-    createSpecialty
+    createSpecialty, 
+    getAllSpecialty,
+    deleteSpecialty
 }
