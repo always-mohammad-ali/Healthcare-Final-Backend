@@ -1,8 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { SpecialtyService } from "./specialty.service";
+import { RequestHandler } from "express";
+import { catchAsync } from "../../shared/catchAsync";
 
-const createSpecialty = async(req : Request, res : Response) =>{
-    try{
+const createSpecialty = catchAsync(
+    async(req : Request, res : Response) =>{
+    
 
         const payload = req.body;
 
@@ -13,18 +16,13 @@ const createSpecialty = async(req : Request, res : Response) =>{
             message : "specialty creation successful",
             data : result
         })
-
-    }catch(error){
-        res.status(401).json({
-            success : false,
-            message : "failed to create specialty",
-            error : error
-        })
-    }
+    
 }
+)
 
-const getAllSpecialty = async(req : Request, res : Response) =>{
-      try{
+const getAllSpecialty = catchAsync(
+    async(req : Request, res : Response) =>{
+      
 
         const specialties = await SpecialtyService.getAllSpecialty();
 
@@ -34,18 +32,16 @@ const getAllSpecialty = async(req : Request, res : Response) =>{
             data : specialties
         })
 
-      }catch(error){
-        res.status(404).json({
-            success : false,
-            message : "failed to get all specialty data",
-            error : error
-        })
-      }
+      
 }
+)
 
-const updateSpecialty = async(req : Request, res : Response) =>{
-    try{
-        const {id} = req.params;
+
+
+const updateSpecialty = catchAsync(
+    async(req : Request, res : Response) =>{
+
+         const {id} = req.params;
         const payload = req.body;
 
         const result = await SpecialtyService.updateSpecialty(payload, id as string);
@@ -56,18 +52,12 @@ const updateSpecialty = async(req : Request, res : Response) =>{
             data : result
         })
 
-
-    }catch(error){
-       res.status(404).json({
-            success : false,
-            message : "failed to update specialty data",
-            error : error
-        })
     }
-}
+)
 
-const deleteSpecialty = async(req : Request, res : Response) =>{
-     try{
+const deleteSpecialty = catchAsync(
+    async(req : Request, res : Response) =>{
+     
 
         const {id}  = req.params;
 
@@ -79,14 +69,9 @@ const deleteSpecialty = async(req : Request, res : Response) =>{
             data : result
         })
 
-      }catch(error){
-        res.status(404).json({
-            success : false,
-            message : "failed to delete specialty data",
-            error : error
-        })
-      }
+      
 }
+)
 
 export const SpecialtyController = {
     createSpecialty, 
