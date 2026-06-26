@@ -6,7 +6,7 @@ import { sendResponse } from "../../shared/sendResponse";
 const registerPatient = catchAsync(
     async(req : Request, res : Response) =>{
         const payload = req.body;
-        console.log(payload);
+        //console.log(payload);
 
         const result = await AuthService.registerPatient(payload);
 
@@ -19,8 +19,25 @@ const registerPatient = catchAsync(
     }
 )
 
+const loginUser = catchAsync(
+    async(req : Request, res : Response) =>{
+        const payload = req.body;
+      
+        const result = await AuthService.loginUser(payload);
+
+        sendResponse(res, {
+            httpStatusCode : 200,
+            success : true,
+            message : "user login successfull",
+            data : result
+        })
+
+    }
+)
+
 
 
 export const AuthController = {
-    registerPatient
+    registerPatient,
+    loginUser
 }
