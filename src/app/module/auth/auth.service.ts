@@ -1,0 +1,66 @@
+import { auth } from "../../lib/auth";
+
+interface IRegisterPatientPayload {
+    name : string,
+    email : string,
+    password : string
+}
+
+
+const registerPatient = async(payload : IRegisterPatientPayload) =>{
+    const {name, email, password} = payload;
+
+    const data = await auth.api.signUpEmail({
+        body : {
+            name,
+            email,
+            password
+        }
+    })
+
+    if(!data.user){
+    throw new Error("Failed to register patient");
+}
+
+   console.log(data);
+
+    return data;
+}
+
+
+
+/*
+
+const registerPatient = async (payload: IRegisterPatientPayload) => {
+    try {
+        const { name, email, password } = payload;
+
+        const data = await auth.api.signUpEmail({
+            body: {
+                name,
+                email,
+                password,
+            },
+        });
+
+        return data;
+    } catch (error) {
+        console.error("========== ERROR ==========");
+        console.dir(error, { depth: null });
+        console.error("===========================");
+
+        throw error;
+    }
+};
+
+*/
+
+
+
+
+
+
+
+export const AuthService = {
+    registerPatient
+}

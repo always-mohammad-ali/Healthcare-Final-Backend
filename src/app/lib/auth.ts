@@ -1,12 +1,13 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { Prisma, Role, UserStatus} from "../../generated/prisma/client";
+import { Role, UserStatus} from "../../generated/prisma/client";
+import { prisma } from "./prisma";
 // If your Prisma file is located elsewhere, you can change the path
 //import { PrismaClient } from "@/generated/prisma/client"; we don't need this because we have prisma client
 
 //const prisma = new PrismaClient(); we don't also need this line too.
 export const auth = betterAuth({
-    database: prismaAdapter(Prisma, {
+    database: prismaAdapter(prisma, {
         provider: "postgresql", // or "mysql", "postgresql", ...etc
     }),
 
@@ -45,4 +46,14 @@ export const auth = betterAuth({
 
         }
     },
+
+/*
+    trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:5000"],
+
+     advanced: {
+         disableCSRFCheck: true,
+     }
+  
+ */
+
 });
