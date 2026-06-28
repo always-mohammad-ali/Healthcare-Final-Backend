@@ -3,7 +3,7 @@ import { envVar } from "../config/env";
 import { success } from "better-auth";
 import status from "http-status";
 
-export const globalErrorHandler = async(err : any, req : Request, res : Response, next : NextFunction) =>{
+export const globalErrorHandler = (err : any, req : Request, res : Response, next : NextFunction) =>{
     if(envVar.NODE_ENV === "development"){
         console.log("Error from global error handler", err);
     }
