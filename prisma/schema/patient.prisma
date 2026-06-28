@@ -1,5 +1,5 @@
 model Patient {
-    id String @unique @default(uuid())
+    id String @id @default(uuid(7))
     name String 
     email String @unique
     profilePhoto String?
