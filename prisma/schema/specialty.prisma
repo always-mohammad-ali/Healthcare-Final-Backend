@@ -23,10 +23,10 @@ model DoctorSpecialty{
 
   //relations
 
-  doctorId String @unique
+  doctorId String 
   doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  specialtyId String @unique
+  specialtyId String 
   specialty Specialty @relation(fields: [specialtyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
 
