@@ -1,6 +1,6 @@
 
 import app from "./app";
-import { envVar } from "./config/env";
+import { envVar } from "./app/config/env";
 
 const runServer = () =>{
      try{
