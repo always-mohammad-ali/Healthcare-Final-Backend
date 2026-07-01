@@ -36,7 +36,7 @@ const setAccessTokenInsideCookie = (res : Response, token : string) =>{
         sameSite : "none",
         path : '/',
         //1d duration
-        maxAge : 24 * 60 * 60,
+        maxAge : 24 * 60 * 60 * 1000,
     })
 }
 
@@ -48,7 +48,7 @@ const setRefreshTokenInsideCookie = (res : Response, token : string) =>{
         sameSite : "none",
         path : '/',
         //7d duration
-        maxAge : 24 * 7 * 60 * 60,
+        maxAge : 24 * 7 * 60 * 60 * 1000,
     })
 }
 
@@ -61,7 +61,7 @@ const setBetterAuthSessionInsideCookie = (res : Response, token : string) =>{
         sameSite : "none",
         path : '/',
         //1d duration
-        maxAge : 24 * 60 * 60,
+        maxAge : 24 * 60 * 60 * 1000,
     })
 }
 
