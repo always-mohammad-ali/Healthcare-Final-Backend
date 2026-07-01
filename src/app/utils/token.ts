@@ -3,7 +3,7 @@ import { jwtUtils } from "./jwt";
 import { envVar } from "../config/env";
 import { Response } from "express";
 import { CookieUtils } from "./cookie";
-import ms from "ms";
+import ms, { StringValue } from "ms";
 
 
 const getAccessToken = (payload : JwtPayload) =>{
@@ -29,36 +29,39 @@ const getRefreshToken = ( payload : JwtPayload) =>{
 
 
 const setAccessTokenInsideCookie = (res : Response, token : string) =>{
-    const maxAge = ms(Number(envVar.ACCESS_TOKEN_EXPIRES_IN))
+  //  const maxAge = ms(envVar.ACCESS_TOKEN_EXPIRES_IN as StringValue)      //it is giving us error and problematic
     CookieUtils.setCookie(res, 'accessToken', token, {
         httpOnly : true,
         secure : true,
         sameSite : "none",
         path : '/',
-        maxAge : Number(maxAge)
+        //1d duration
+        maxAge : 24 * 60 * 60,
     })
 }
 
 const setRefreshTokenInsideCookie = (res : Response, token : string) =>{
-    const maxAge = ms(Number(envVar.REFRESH_TOKEN_EXPIRES_IN));
+   // const maxAge = ms(envVar.REFRESH_TOKEN_EXPIRES_IN as StringValue);
     CookieUtils.setCookie(res, 'refreshToken', token, {
         httpOnly : true,
         secure : true,
         sameSite : "none",
         path : '/',
-        maxAge : Number(maxAge)
+        //7d duration
+        maxAge : 24 * 7 * 60 * 60,
     })
 }
 
 
 const setBetterAuthSessionInsideCookie = (res : Response, token : string) =>{
-    const maxAge = ms(Number(envVar.REFRESH_TOKEN_EXPIRES_IN));
+   // const maxAge = ms(envVar.REFRESH_TOKEN_EXPIRES_IN as StringValue);
     CookieUtils.setCookie(res, 'better-auth.session_cookie', token, {
         httpOnly : true,
         secure : true,
         sameSite : "none",
         path : '/',
-        maxAge : Number(maxAge)
+        //1d duration
+        maxAge : 24 * 60 * 60,
     })
 }
 
