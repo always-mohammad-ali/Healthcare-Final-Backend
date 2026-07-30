@@ -41,6 +41,7 @@ const registerPatient = async(payload : IRegisterPatientPayload) =>{
       })
     
       return patientTx;
+    
 
    })
 

@@ -21,8 +21,9 @@ app.get('/', (req: Request, res: Response) => {
   res.send('basic route is working');
 });
 
-app.use(globalErrorHandler);
+
 app.use(notFound);
+app.use(globalErrorHandler);
 
 
 export default app;

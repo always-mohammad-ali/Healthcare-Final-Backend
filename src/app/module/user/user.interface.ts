@@ -1,7 +1,7 @@
 import { Gender } from "../../../generated/prisma/enums";
 
 export interface ICreateDoctorPayload{
-    password : string;
+    password : string;   //why does password is outside of doctor? what is the purpose and use case of password here?
     doctor : {
       name : string;
       email : string;
@@ -16,5 +16,5 @@ export interface ICreateDoctorPayload{
       currentWorkingPlace: string;
       designation: string;
     },
-    specialties : string[];
+    specialties : string[];  //why does specialties is outside of doctor? does specialties random name here or is it a field/column inside doctor table?
 }
