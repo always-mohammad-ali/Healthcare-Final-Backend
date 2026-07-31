@@ -40,7 +40,7 @@ router.post("/create-doctor",
     
     UserController.createDoctor);
 
-router.post("/create-admin", checkAuth(Role.SUPERADMIN), validateRequest(UserZodValidation.createAdminZodValidationSchema), UserController.createAdmin);
+router.post("/create-admin",  validateRequest(UserZodValidation.createAdminZodValidationSchema), UserController.createAdmin);
 
 router.post("/create-super-admin", validateRequest(UserZodValidation.createSuperAdminZodValidationSchema), UserController.createSuperAdmin);
 
