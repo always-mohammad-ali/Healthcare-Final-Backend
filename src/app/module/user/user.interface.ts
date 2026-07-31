@@ -18,3 +18,14 @@ export interface ICreateDoctorPayload{
     },
     specialties : string[];  //why does specialties is outside of doctor? does specialties random name here or is it a field/column inside doctor table?
 }
+
+
+export interface ICreateAdminPayload{
+  password : string;
+  admin : {
+    name : string;
+    email : string;
+    profilePhoto ?: string;
+    contactNumber : string
+  }
+}

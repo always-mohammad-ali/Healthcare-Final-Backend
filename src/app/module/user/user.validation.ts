@@ -1,7 +1,7 @@
 import z from "zod";
 import { Gender } from "../../../generated/prisma/enums";
 
-export const createDoctorZodSchema = z.object({
+ const createDoctorZodValidationSchema = z.object({
     password : z.string("password is required").min(6, "password must be at least 6 char").max(20, 
         "password could be at most 20 char"),
 
@@ -36,3 +36,25 @@ export const createDoctorZodSchema = z.object({
     }),
     specialties: z.array(z.uuid(), "Specialties must be an array of strings").min(1, "Include at least 1 specialty"),
 })
+
+
+
+
+const createAdminZodValidationSchema = z.object({
+  body: z.object({
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    admin: z.object({
+      name: z.string().min(1, "Name is required"),
+      email: z.email("Invalid email format"),
+      profilePhoto: z.url("Invalid URL format").optional(),
+      contactNumber: z.string().min(1, "Contact number is required"),
+    }),
+  }),
+});
+
+
+export const UserZodValidation = {
+
+    createDoctorZodValidationSchema,
+    createAdminZodValidationSchema
+}

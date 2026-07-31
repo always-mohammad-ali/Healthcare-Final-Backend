@@ -3,8 +3,9 @@ import { Role, Specialty } from "../../../generated/prisma/client";
 import AppError from "../../errorHelpers/AppError";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
-import { ICreateDoctorPayload } from "./user.interface";
-import { tokenUtils } from "../../utils/token";
+import { ICreateAdminPayload, ICreateDoctorPayload } from "./user.interface";
+
+//create doctor
 
 const createDoctor = async(payload : ICreateDoctorPayload) =>{
 
@@ -130,36 +131,10 @@ const createDoctor = async(payload : ICreateDoctorPayload) =>{
 
         })
 
-        const accessToken = tokenUtils.getAccessToken({
-            userId : userData.user.id,
-            name : userData.user.name,
-            email : userData.user.email,
-            role : userData.user.role,
-            status : userData.user.status,
-            isDeleted : userData.user.isDeleted,
-            emailVerified : userData.user.emailVerified
-        })
-
-        const refreshToken = tokenUtils.getRefreshToken({
-
-            userId : userData.user.id,
-            name : userData.user.name,
-            email : userData.user.email,
-            role : userData.user.role,
-            status : userData.user.status,
-            isDeleted : userData.user.isDeleted,
-            emailVerified : userData.user.emailVerified
-
-        })
+        
 
 
-     return {
-        ...userData,
-        accessToken,
-        refreshToken,
-        result
-
-     } 
+     return result;
      
      // to whom this result is returning? it is going to controllers' result, where we are destructuring and setting up inside cookie
 
@@ -181,10 +156,101 @@ const createDoctor = async(payload : ICreateDoctorPayload) =>{
 
 
 
+//create admin
+
+
+const createAdmin = async(payload : ICreateAdminPayload) =>{
+
+    const userExists = await prisma.user.findUnique({
+        where : {
+            email : payload.admin.email
+        }
+    })
+
+    if(userExists){
+        throw new AppError(status.CONFLICT, "user with this email already exists");
+    }
+
+    const userData = await auth.api.signUpEmail({
+        body : {
+            name : payload.admin.name,
+            email : payload.admin.email,
+            password : payload.password,
+            role : Role.ADMIN,
+            needPasswordChange : true,
+            rememberMe : false
+        }
+    })
+
+    if(!userData){
+        throw new AppError(status.BAD_REQUEST, "failed to create admin user data")
+    }
+
+    try{
+
+        const result = await prisma.$transaction(async(tx) =>{
+           const admin = await tx.admin.create({
+                data : {
+                    userId : userData.user.id,
+                    name : payload.admin.name,
+                    email : payload.admin.email,
+                    profilePhoto : payload.admin.profilePhoto,
+                    contactNumber : payload.admin.contactNumber
+                }
+            })
+
+            const createdAdmin = await tx.admin.findUnique({
+                where : {
+                    id : admin.id
+                },
+                select : {
+                    id : true,
+                    name : true,
+                    email : true,
+                    profilePhoto : true,
+                    contactNumber : true,
+                    isDeleted : true,
+                    createdAt : true,
+                    updatedAt : true,
+                    user : {
+                        select : {
+                            id : true,
+                            name : true,
+                            email : true,
+                            role : true,
+                            status : true
+                        }
+                    }
+                }
+
+            })
+
+            return createdAdmin;
+
+        })
+
+        return result;
+
+    }catch(error){
+        console.log("failed to transaction the user value to create admin profile, delete the user now", error);
+
+        await prisma.user.delete({
+            where : {
+                id : userData.user.id
+            }
+        })
+
+        throw error;
+    }
+}
+
+
+
 
 
 
 
 export const UserService = {
-    createDoctor
+    createDoctor,
+    createAdmin
 }

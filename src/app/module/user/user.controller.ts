@@ -3,7 +3,7 @@ import { catchAsync } from "../../shared/catchAsync";
 import { UserService } from "./user.service";
 import { sendResponse } from "../../shared/sendResponse";
 import status from "http-status";
-import { tokenUtils } from "../../utils/token";
+
 
 
 const createDoctor = catchAsync(
@@ -13,29 +13,39 @@ const createDoctor = catchAsync(
 
         const result = await UserService.createDoctor(payload);
         
-        const {accessToken, refreshToken, token, ...rest} = result;
+      
 
-        tokenUtils.setAccessTokenInsideCookie(res, accessToken);
-        tokenUtils.setRefreshTokenInsideCookie(res, refreshToken);
-        tokenUtils.setBetterAuthSessionInsideCookie(res, token as string);
 
 
         sendResponse(res, {
           httpStatusCode : status.CREATED,
           success : true,
           message : "successfully registered  doctor profile data",
-          data : {
-            accessToken,
-            refreshToken,
-            token,
-            ...rest
-          }
+          data : result
         })
 
       
 }
 )
 
+
+const createAdmin = catchAsync(
+  async(req : Request, res : Response) =>{
+
+    const payload = req.body;
+
+    const result = await UserService.createAdmin(payload);
+
+    sendResponse(res, {
+      httpStatusCode : status.CREATED,
+      success : true,
+      message : "admin creation done",
+      data : result
+    })
+  }
+)
+
 export const UserController = {
-    createDoctor
+    createDoctor,
+    createAdmin
 }

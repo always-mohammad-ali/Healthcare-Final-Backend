@@ -3,7 +3,7 @@ import { UserController } from "./user.controller";
 import z from "zod";
 import { Gender } from "../../../generated/prisma/enums";
 import { validateRequest } from "../../middleware/validateRequest";
-import { createDoctorZodSchema } from "./user.validation";
+import { UserZodValidation } from "./user.validation";
 
 
 
@@ -35,9 +35,11 @@ router.post("/create-doctor",
     },
 
 */
-    validateRequest(createDoctorZodSchema),
+    validateRequest(UserZodValidation.createDoctorZodValidationSchema),
     
     UserController.createDoctor);
+
+router.post("/create-admin", UserController.createAdmin)
 
 
 export const UserRoute = router;
