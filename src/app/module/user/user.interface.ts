@@ -29,3 +29,13 @@ export interface ICreateAdminPayload{
     contactNumber : string
   }
 }
+
+export interface ICreateSuperAdminPayload{
+  password : string;
+  superAdmin : {
+    name : string;
+    email : string;
+    profilePhoto ?: string;
+    contactNumber : string;
+  }
+}

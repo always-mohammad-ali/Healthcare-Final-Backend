@@ -1,4 +1,4 @@
-model Admin {
+model SuperAdmin {
   id            String    @id @default(uuid(7))
   name          String
   email         String    @unique
@@ -14,5 +14,5 @@ model Admin {
 
   @@index([email])
   @@index([isDeleted])
-  @@map("admins")
+  @@map("superAdmin")
 }

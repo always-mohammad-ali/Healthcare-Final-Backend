@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { UserController } from "./user.controller";
 import z from "zod";
-import { Gender } from "../../../generated/prisma/enums";
+import { Gender, Role } from "../../../generated/prisma/enums";
 import { validateRequest } from "../../middleware/validateRequest";
 import { UserZodValidation } from "./user.validation";
+import { checkAuth } from "../../middleware/checkAuth";
 
 
 
@@ -39,7 +40,9 @@ router.post("/create-doctor",
     
     UserController.createDoctor);
 
-router.post("/create-admin", UserController.createAdmin)
+router.post("/create-admin", checkAuth(Role.SUPERADMIN), validateRequest(UserZodValidation.createAdminZodValidationSchema), UserController.createAdmin);
+
+router.post("/create-super-admin", validateRequest(UserZodValidation.createSuperAdminZodValidationSchema), UserController.createSuperAdmin);
 
 
 export const UserRoute = router;

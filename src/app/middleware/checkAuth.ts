@@ -8,12 +8,16 @@ import { jwtUtils } from "../utils/jwt";
 import { envVar } from "../config/env";
 
 export const checkAuth = (...authRoles : Role[]) => async(req : Request, res : Response, next : NextFunction) =>{
+
+    console.log("Cookies:", req.cookies);
+    console.log("Headers:", req.headers.cookie);
        
     try{
 
         //BETTER-AUTH SESSION TOKEN VERIFICATION
 
         const sessionToken = CookieUtils.getCookie(req, "better-auth.session_token");
+        console.log(sessionToken);
 
         if(!sessionToken){
             throw new AppError(status.UNAUTHORIZED, "Unauthorized access! No session token provided");
@@ -62,6 +66,13 @@ export const checkAuth = (...authRoles : Role[]) => async(req : Request, res : R
 
                 if(authRoles.length > 0 && !authRoles.includes(user.role)){
                     throw new AppError(status.FORBIDDEN, "Forbidden access, you don't have permission to access this routes and resources");
+                }
+
+
+                req.user = {
+                    userId : user.id,
+                    email : user.email,
+                    role : user.role
                 }
 
 
