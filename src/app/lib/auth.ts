@@ -4,6 +4,7 @@ import { Role, UserStatus} from "../../generated/prisma/client";
 import { prisma } from "./prisma";
 import ms from "ms";
 import { envVar } from "../config/env";
+import { bearer } from "better-auth/plugins";
 // If your Prisma file is located elsewhere, you can change the path
 //import { PrismaClient } from "@/generated/prisma/client"; we don't need this because we have prisma client
 
@@ -48,6 +49,11 @@ export const auth = betterAuth({
 
         }
     },
+    
+    plugins : [
+        bearer()
+    ],
+
 
     session : {
     /*   expiresIn : Number(ms(Number(envVar.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN))),
