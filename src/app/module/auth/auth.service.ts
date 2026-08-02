@@ -380,6 +380,57 @@ const verifyEmail = async(email : string, otp : string ) =>{
 }
 
 
+const forgetPassword = async(email : string) =>{
+
+    const isUserExists = await prisma.user.findUnique({
+        where : {email}
+    })
+
+    if(!isUserExists){
+        throw new AppError(status.NOT_FOUND, "user not found with that email")
+    }
+
+    if(!isUserExists.emailVerified){
+        throw new AppError(status.UNAUTHORIZED, "user not verified")
+    }
+
+    if(isUserExists.isDeleted || isUserExists.status === UserStatus.BLOCKED){
+        throw new AppError(status.UNAUTHORIZED, "user deleted or blocked")
+    }
+
+    await auth.api.requestPasswordResetEmailOTP({
+        body : {email}
+    })
+
+}
+
+const resetPassword = async(email:string, otp:string, newPassword:string)=>{
+
+    const isUserExists = await prisma.user.findUnique({
+        where : {email}
+    })
+
+    if(!isUserExists){
+        throw new AppError(status.NOT_FOUND, "user not found with that email")
+    }
+
+    if(!isUserExists.emailVerified){
+        throw new AppError(status.UNAUTHORIZED, "user not verified")
+    }
+
+    if(isUserExists.isDeleted || isUserExists.status === UserStatus.BLOCKED){
+        throw new AppError(status.UNAUTHORIZED, "user deleted or blocked")
+    }
+
+    await auth.api.resetPasswordEmailOTP({
+        body : {
+            email,
+            otp,
+            password : newPassword
+        }
+    })
+}
+
 
 
 
@@ -390,5 +441,7 @@ export const AuthService = {
     getNewToken,
     changePassword,
     logOutUser,
-    verifyEmail
+    verifyEmail,
+    forgetPassword,
+    resetPassword
 }
