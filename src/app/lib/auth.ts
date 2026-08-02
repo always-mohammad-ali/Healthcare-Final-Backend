@@ -11,6 +11,8 @@ import { sendEmail } from "../utils/email";
 
 //const prisma = new PrismaClient(); we don't also need this line too.
 export const auth = betterAuth({
+    baseURL : envVar.BETTER_AUTH_URL,
+    secret : envVar.BETTER_AUTH_SECRET,
     database: prismaAdapter(prisma, {
         provider: "postgresql", // or "mysql", "postgresql", ...etc
     }),
@@ -19,6 +21,26 @@ export const auth = betterAuth({
         enabled : true,
         requireEmailVerification : true,  
     },
+    
+    socialProviders : {
+        google : {
+            clientId : envVar.GOOGLE_CLIENT_ID,
+            clientSecret : envVar.GOOGLE_CLIENT_SECRET,
+
+            mapProfileToUser: () => {
+                return {
+                    role : Role.PATIENT,
+                    status : UserStatus.ACTIVE,
+                    needPasswordChange : false,
+                    emailVerified : true,
+                    isDeleted : false,
+                    deletedAt : null,
+                }
+            },
+        }
+
+    },
+
     emailVerification : {
          sendOnSignUp : true,
          sendOnSignIn : true,
@@ -119,15 +141,35 @@ export const auth = betterAuth({
             maxAge : 24 * 60 * 60
 
         }
-    }
+    },
 
-/*
-    trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:5000"],
+
+  //  trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:5000"],
 
      advanced: {
-         disableCSRFCheck: true,
+        // disableCSRFCheck: true,
+        useSecureCookies : false,
+
+        cookies : {
+            state:{
+                attributes:{
+                    sameSite : "none",
+                    secure : true,
+                    httpOnly : true,
+                    path : "/"
+                }
+            },
+            sessionToken:{
+                attributes:{
+                    sameSite : "none",
+                    secure : true,
+                    httpOnly : true,
+                    path : "/"
+                }
+            }
+        }
      }
   
- */
+ 
 
 });

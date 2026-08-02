@@ -221,6 +221,7 @@ const resetPassword = catchAsync(
 
 
 
+
 export const AuthController = {
     registerPatient,
     loginUser, 

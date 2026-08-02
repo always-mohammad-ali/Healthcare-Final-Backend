@@ -314,6 +314,18 @@ const changePassword = async(payload : IChangePassword, sessionToken : string) =
     })
 
 
+    if(session.user.needPasswordChange){
+        await prisma.user.update({
+            where : {
+                id : session.user.id
+            },
+            data : {
+                needPasswordChange : false
+            }
+        })
+    }
+
+
    const accessToken = tokenUtils.getAccessToken({
         userId : session.user.id,
         role : session.user.role,
@@ -333,8 +345,6 @@ const changePassword = async(payload : IChangePassword, sessionToken : string) =
         isDeleted : session.user.isDeleted,
         emailVerified : session.user.emailVerified
     })
-
-
 
     return {
         ...result,
@@ -427,6 +437,21 @@ const resetPassword = async(email:string, otp:string, newPassword:string)=>{
             email,
             otp,
             password : newPassword
+        }
+    })
+
+
+    if(isUserExists.needPasswordChange){     //because if admin/doctor clicks forget password initially somehow even after giving them password
+        await prisma.user.update({
+            where : {id : isUserExists.id},
+            data : {needPasswordChange : false}
+        })
+    }
+
+
+    await prisma.session.deleteMany({
+        where : {
+           userId: isUserExists.id
         }
     })
 }
