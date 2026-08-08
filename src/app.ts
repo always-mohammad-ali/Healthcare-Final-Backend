@@ -12,6 +12,7 @@ const app: Application = express();
 app.set("view engine", "ejs");
 app.set("views", path.resolve(process.cwd(), `src/app/templates`) );
 
+// Catch-all route handler for Better Auth
 app.use("/api/auth", toNodeHandler(auth));
 
 // Enable URL-encoded form data parsing
