@@ -148,7 +148,7 @@ export const auth = betterAuth({
     },
 
 
-  //  trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:5000"],
+    trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:5000", envVar.FRONTEND_URL],
 
      advanced: {
         // disableCSRFCheck: true,
