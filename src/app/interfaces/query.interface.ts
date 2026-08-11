@@ -27,7 +27,7 @@ export interface PrismaCountArgs{
 export interface PrismaModelDelegate{
 
     findMany(args ?: any) : Promise<any[]>;       // what is findMany here? where does that come from? what is args and everything?
-    count(args ?: any) : Promise<number>;         //same question for count too as like findMany?
+    count(args ?: any) : Promise<number>;         //same question for count too as like findMany? is it built in function?
 }
 
 export interface IQueryParams{
@@ -47,3 +47,29 @@ export interface IQueryConfig{
     searchableFields ?: string[];        //how it is string and why?
     filterableFields ?: string[];
 }
+
+
+export interface PrismaStringFilter{
+    contains ?: string;
+    startsWith ?: string;
+    endsWith ?: string;
+    mode ?: "insensitive" | "default";
+    equals ?: string;
+    in ?: string[];
+    notIn ?: string[];
+    lt ?: string;
+    lte ?: string;
+    gt ?: string;
+    gte ?: string;
+    not ?: PrismaStringFilter | string;
+}
+
+
+export interface PrismaWhereConditions{
+    OR ?: Record<string, unknown>[];
+    AND ?: Record<string, unknown>[];
+    NOT ?: Record<string, unknown>[];
+    
+    [key: string] : unknown;
+}
+
