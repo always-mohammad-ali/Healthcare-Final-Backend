@@ -4,6 +4,8 @@ import { AuthRoute } from "../module/auth/auth.route";
 import { UserRoute } from "../module/user/user.route";
 import { DoctorRoute } from "../module/doctor/doctor.route";
 import { AdminRoutes } from "../module/admin/admin.route";
+import { ScheduleRoutes } from "../module/schedule/schedule.route";
+import { DoctorSchedules } from "../module/doctorSchedule/doctorSchedule.route";
 
 const router = Router();
 
@@ -16,6 +18,10 @@ router.use("/user", UserRoute)
 router.use("/doctors", DoctorRoute)
 
 router.use("/admins", AdminRoutes);
+
+router.use("/schedules", ScheduleRoutes);
+
+router.use("/doctorSchedules", DoctorSchedules);
 
 
 
