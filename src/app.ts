@@ -9,6 +9,8 @@ import path from "path";
 import cors from "cors";
 import { envVar } from "./app/config/env";
 import { PaymentController } from "./app/module/payment/payment.controller";
+import cron from "node-cron"
+import { AppointmentService } from "./app/module/appointment/appointment.service";
 
 const app: Application = express();
 
@@ -35,6 +37,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(cookieParser());  //added for checking middleware cookie data extraction
+
+cron.schedule("*/25 * * * *", async() =>{
+  try{
+    console.log("running cron job to cancel unpaid appointments....");
+    await AppointmentService.cancelUnpaidAppointments();
+
+  }catch(error : any){
+
+    console.log("error happens to cancel unpaid appointments by cron job", error.message);
+    
+  }
+})
 
 app.use("/api/v1", IndexRoutes);
 
