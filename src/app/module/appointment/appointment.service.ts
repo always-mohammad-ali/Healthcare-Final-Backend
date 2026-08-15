@@ -1,4 +1,5 @@
-import { uuidv7 } from "zod";
+//import { uuidv7 } from "zod";
+import {v7 as uuidv7} from "uuid"
 import { IRequestUser } from "../../interfaces/requestUser.interface";
 import { prisma } from "../../lib/prisma";
 import { IBookAppointmentPayload } from "./appointment.interface";

@@ -18,7 +18,6 @@ model Appointment {
     prescription Prescription?
     review       Review?
     payment      Payment?
-    medicalReport MedicalReport[]
 
     @@index([patientId])
     @@index([doctorId])
